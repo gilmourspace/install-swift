@@ -28,4 +28,4 @@ runs:
           if: ${{ runner.os == 'macOS' }}
           uses: swift-actions/setup-swift@v1
           with:
-            swift-version: ${{ input.swift-version }}
+            swift-version: ${{ inputs.swift-version }}

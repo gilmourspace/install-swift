@@ -32,10 +32,21 @@ runs:
 
         - name: Install Swift (Linux)
           if: ${{ runner.os == 'Linux' && inputs.swift-version == '5.7.1' }}
-          uses: compnerd/gha-setup-swift@main
-          with:
-              branch: swift-5.7.1-release
-              tag: 5.7.1-RELEASE
+          run: |
+            source /etc/os-release; OS="${ID}${VERSION_ID}"
+            case "${OS}" in
+            ubuntu16.04|ubuntu18.04|ubuntu20.04|centos7|centos8|amzn2)
+              mkdir -p -m 0755 ${HOME}/swift-5.7.1-RELEASE
+              cd ${HOME}/swift-5.7.1-RELEASE
+              curl -sLo toolchain.tgz https://download.swift.org/swift-5.7.1-release/${OS/./}/swift-5.7.1-RELEASE/swift-5.7.1-RELEASE-${OS}.tar.gz
+              # N.B. Can't strip the leading /usr because things rely on that prefix being under the install root.
+              tar -z -x --strip-components=1 -f toolchain.tgz && rm -f toolchain.tgz
+            *)
+              echo "::error file=/etc/os-release,title=Unsupported::unsupported Linux distribution ${RELEASE}"
+              exit 1
+            esac
+            echo "${HOME}/swift-5.7.1-RELEASE/usr/bin" >> $GITHUB_PATH
+
         - name: Install Swift (macOS)
           if: ${{ runner.os == 'macOS' && inputs.swift-version == '5.7.1' }}
           uses: compnerd/gha-setup-swift@main

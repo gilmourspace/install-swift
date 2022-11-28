@@ -19,13 +19,26 @@ runs:
               tag: 5.6-RELEASE
 
         - name: Install Swift (Linux)
-          if: ${{ runner.os == 'Linux' }}
+          if: ${{ runner.os == 'Linux' && inputs.swift-version != "5.7.1" }}
           uses: swift-actions/setup-swift@v1
           with:
-            swift-version: ${{ inputs.swift-version }}
+              swift-version: ${{ inputs.swift-version }}
 
         - name: Install Swift (macOS)
-          if: ${{ runner.os == 'macOS' }}
+          if: ${{ runner.os == 'macOS' && inputs.swift-version != "5.7.1" }}
           uses: swift-actions/setup-swift@v1
           with:
-            swift-version: ${{ inputs.swift-version }}
+              swift-version: ${{ inputs.swift-version }}
+
+        - name: Install Swift (Linux)
+          if: ${{ runner.os == 'Linux' && inputs.swift-version == "5.7.1" }}
+          uses: compnerd/gha-setup@main
+          with:
+              branch: swift-6.7.1-release
+              tag: 5.7.1-RELEASE
+        - name: Install Swift (macOS)
+          if: ${{ runner.os == 'macOS' && inputs.swift-version == "5.7.1" }}
+          uses: compnerd/gha-setup@main
+          with:
+              branch: swift-6.7.1-release
+              tag: 5.7.1-RELEASE

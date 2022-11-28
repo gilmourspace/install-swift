@@ -46,6 +46,7 @@ runs:
               exit 1
             esac
             echo "${HOME}/swift-5.7.1-RELEASE/usr/bin" >> $GITHUB_PATH
+          shell: bash
 
         - name: Install Swift (macOS)
           if: ${{ runner.os == 'macOS' && inputs.swift-version == '5.7.1' }}
